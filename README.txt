@@ -1,6 +1,6 @@
 Coding Agent
 
-这是一个从零实现的本地编程智能体。当前版本完成了项目骨架、命令行入口和四个本地工具；后续将加入模型调用和 Agent 循环。
+这是一个从零实现的本地编程智能体。当前版本完成了项目骨架、命令行入口、四个本地工具和 OpenAI 兼容模型连接；后续将加入 Agent 循环。
 
 运行环境
 - Python 3.10 或更高版本
@@ -13,6 +13,9 @@ Coding Agent
 
 当前运行方式
 python agent.py --workspace demo_project "查看这个项目"
+
+检查模型连接
+python agent.py --workspace demo_project --check-model "测试模型连接"
 
 当前本地工具
 - list_files：列出工作区文件

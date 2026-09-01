@@ -10,6 +10,8 @@ import argparse
 from pathlib import Path
 
 from tools import WorkspaceTools
+from config import load_model_config
+from llm_client import ModelClient
 
 
 def parse_args() -> argparse.Namespace:
@@ -25,6 +27,7 @@ def parse_args() -> argparse.Namespace:
         nargs="?",
         help="Programming task for the agent (omit to enter it interactively)",
     )
+    parser.add_argument("--check-model", action="store_true", help="Send one request to verify the configured model")
     return parser.parse_args()
 
 
@@ -46,6 +49,17 @@ def main() -> None:
     print("Workspace files:")
     print(tools.list_files())
     print("Tool layer is ready. Model integration and Agent loop will be added next.")
+    if args.check_model:
+        try:
+            config = load_model_config()
+            answer = ModelClient(config).complete([
+                {"role": "system", "content": "你是一个简洁的编程助手。"},
+                {"role": "user", "content": "请只回复：模型连接成功"},
+            ])
+            print(f"Model: {config.model_name}")
+            print(f"Assistant: {answer}")
+        except (ValueError, RuntimeError) as error:
+            raise SystemExit(str(error)) from error
 
 
 if __name__ == "__main__":
