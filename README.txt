@@ -1,6 +1,6 @@
 Coding Agent
 
-这是一个从零实现的本地编程智能体。当前版本完成了项目骨架、命令行入口、四个本地工具和 OpenAI 兼容模型连接；后续将加入 Agent 循环。
+这是一个从零实现的本地编程智能体。当前版本完成了项目骨架、命令行入口、四个本地工具、OpenAI 兼容模型连接和 Agent 循环。
 
 运行环境
 - Python 3.10 或更高版本
@@ -17,6 +17,9 @@ python agent.py --workspace demo_project "查看这个项目"
 检查模型连接
 python agent.py --workspace demo_project --check-model "测试模型连接"
 
+Agent 运行方式
+默认运行会在模型和本地工具之间循环，最多执行 15 步。
+
 当前本地工具
 - list_files：列出工作区文件
 - read_file：读取工作区内的文本文件
@@ -25,3 +28,7 @@ python agent.py --workspace demo_project --check-model "测试模型连接"
 
 仓库地址
 https://github.com/qzygwcs1/coding-agent
+
+
+Agent 工作规则
+模型先查看文件，再修改代码并运行测试；工具结果会回到消息历史，最多循环 15 步。

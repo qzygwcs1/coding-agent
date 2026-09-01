@@ -12,6 +12,7 @@ from pathlib import Path
 from tools import WorkspaceTools
 from config import load_model_config
 from llm_client import ModelClient
+from agent_loop import AgentLoop
 
 
 def parse_args() -> argparse.Namespace:
@@ -28,6 +29,7 @@ def parse_args() -> argparse.Namespace:
         help="Programming task for the agent (omit to enter it interactively)",
     )
     parser.add_argument("--check-model", action="store_true", help="Send one request to verify the configured model")
+    parser.add_argument("--max-steps", type=int, default=15, help="Maximum model-tool rounds")
     return parser.parse_args()
 
 
@@ -48,7 +50,6 @@ def main() -> None:
     print("Available local tools: list_files, read_file, write_file, run_command")
     print("Workspace files:")
     print(tools.list_files())
-    print("Tool layer is ready. Model integration and Agent loop will be added next.")
     if args.check_model:
         try:
             config = load_model_config()
@@ -60,7 +61,16 @@ def main() -> None:
             print(f"Assistant: {answer}")
         except (ValueError, RuntimeError) as error:
             raise SystemExit(str(error)) from error
+        return
 
+    config = load_model_config()
+    result = AgentLoop(ModelClient(config), {
+        "list_files": tools.list_files,
+        "read_file": tools.read_file,
+        "write_file": tools.write_file,
+        "run_command": tools.run_command,
+    }, max_steps=args.max_steps).run(task)
+    print(f"Final answer: {result}")
 
 if __name__ == "__main__":
     main()

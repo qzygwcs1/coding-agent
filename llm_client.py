@@ -23,3 +23,27 @@ class ModelClient:
             return content
         except Exception as error:
             raise RuntimeError(f"模型调用失败：{error}") from error
+    def complete_with_tools(self, messages: list[dict[str, Any]], tools: list[dict[str, Any]]) -> dict[str, Any]:
+        try:
+            response = self._client.chat.completions.create(
+                model=self.config.model_name,
+                messages=messages,
+                tools=tools,
+            )
+            message = response.choices[0].message
+            result: dict[str, Any] = {"role": "assistant", "content": message.content}
+            if message.tool_calls:
+                result["tool_calls"] = [
+                    {
+                        "id": call.id,
+                        "type": "function",
+                        "function": {
+                            "name": call.function.name,
+                            "arguments": call.function.arguments,
+                        },
+                    }
+                    for call in message.tool_calls
+                ]
+            return result
+        except Exception as error:
+            raise RuntimeError(f"模型调用失败：{error}") from error
