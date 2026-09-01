@@ -9,6 +9,8 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
+from tools import WorkspaceTools
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="A small local coding agent")
@@ -39,7 +41,11 @@ def main() -> None:
 
     print(f"Workspace: {workspace}")
     print(f"Task: {task}")
-    print("Agent scaffold is ready. Model and local tools will be added next.")
+    tools = WorkspaceTools(workspace)
+    print("Available local tools: list_files, read_file, write_file, run_command")
+    print("Workspace files:")
+    print(tools.list_files())
+    print("Tool layer is ready. Model integration and Agent loop will be added next.")
 
 
 if __name__ == "__main__":

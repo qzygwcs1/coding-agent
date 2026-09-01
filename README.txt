@@ -1,6 +1,6 @@
 Coding Agent
 
-这是一个从零实现的本地编程智能体。当前版本完成了项目骨架和命令行入口；后续将加入模型调用、本地文件工具、命令执行和 Agent 循环。
+这是一个从零实现的本地编程智能体。当前版本完成了项目骨架、命令行入口和四个本地工具；后续将加入模型调用和 Agent 循环。
 
 运行环境
 - Python 3.10 或更高版本
@@ -13,6 +13,12 @@ Coding Agent
 
 当前运行方式
 python agent.py --workspace demo_project "查看这个项目"
+
+当前本地工具
+- list_files：列出工作区文件
+- read_file：读取工作区内的文本文件
+- write_file：写入工作区内的文件
+- run_command：在工作区内执行命令，默认超时 30 秒
 
 仓库地址
 https://github.com/qzygwcs1/coding-agent
